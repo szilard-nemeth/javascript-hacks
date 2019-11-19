@@ -24,6 +24,8 @@ function printForm() {
         if ($input.is(':radio,:checkbox')) {
             if (this.checked) {
                 value = 'true'
+            } else {
+                value = 'false'
             }
         }
         result.set(jQuery(settingNames[i]).html(), value)
