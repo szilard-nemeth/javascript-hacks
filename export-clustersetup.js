@@ -113,9 +113,8 @@ function objToStrMap(obj) {
 
 function getParamInputsMap() {
     var settingNames = jQuery('.setting-name')
-    var settingInputs = jQuery('.setting-main input')
-    
-    //TODO reuse this Map in other methods
+    var settingInputs = jQuery("input[name='value'],select[name='value']")
+
     //put param names and inputs to a Map
     var paramInputsMap = new Map();
     i = 0
@@ -125,6 +124,7 @@ function getParamInputsMap() {
         i++
     });
 
+    console.log("Preparing params map")
     return paramInputsMap
 }
 
@@ -135,7 +135,7 @@ function getFormValues() {
     for (const [inputName, input] of paramInputsMap) {
         var value = input.val()
         if (input.is(':radio,:checkbox')) {
-            if (this.checked) {
+            if (input.is(':checked')) {
                 value = 'true'
             } else {
                 value = 'false'
@@ -180,3 +180,4 @@ addStyle()
 createButton("Export params", exportAndCopyParams)
 createButton("Import params", showImportParamsTextbox)
 createButton("Clear params", clearFormValues)
+jQuery('.behavior-loading').hide()
