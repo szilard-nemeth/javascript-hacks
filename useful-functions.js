@@ -28,7 +28,7 @@ waitForEl(selector, function() {
 
 //=========================================================================
 
-
+//Find localStorage items by string key prefix / query string
 function findLocalStorageItems(query, includeQueryInKeys) {
 	//SOURCE: https://gist.github.com/n0m4dz/77f08d3de1b9115e905c
 	var i, results = [];
@@ -45,6 +45,15 @@ function findLocalStorageItems(query, includeQueryInKeys) {
 		}
 	}
 	return results;
+}
+
+//Usage
+function cleanupStorage() {
+	var results = findLocalStorageItems("somekey", true)
+	results.forEach(r => {
+		printLog("Deleting localStorage item " + r.key);
+		window.localStorage.removeItem(r.key);
+	})
 }
 
 //=========================================================================
@@ -81,6 +90,60 @@ function downloadHandler(evt) {
                 href: URL.createObjectURL(blob)
             })[0].click();
         });
+}
+
+//=========================================================================
+//Copy icon with copy functionality
+
+function makeCopyIcon(idOfItemToCopy) {
+	var funcCall = `copyText($('${idOfItemToCopy}').find('a')[0].download)`
+	return `<img onclick="${funcCall}" src="${SERVER_URL}/copy-icon.png" alt="copy" style="width:15px;height:15px;cursor: pointer;">`
+}
+
+//Invocation: ${makeCopyIcon(`#${quantaTestLogParagraphIdPrefix}-${jiraData.id}-${gtn}`)}
+
+function copyText(str) {
+  const el = document.createElement('textarea');
+  el.value = str;
+  el.setAttribute('readonly', '');
+  el.style.position = 'absolute';
+  el.style.left = '-9999px';
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+}
+
+
+//=========================================================================
+//Serialize / Deserialize JS Map
+//https://2ality.com/2015/08/es6-map-json.html
+//https://stackoverflow.com/questions/50153172/how-to-serialize-a-map-in-javascript
+
+function strMapToObj(strMap) {
+  let obj = Object.create(null);
+  for (let [k,v] of strMap) {
+    // We don’t escape the key '__proto__'
+    // which can cause problems on older engines
+    obj[k] = v;
+  }
+  return obj;
+}
+
+function objToStrMap(obj) {
+	var entries = Object.entries(obj)
+	if (entries.length > 0) {
+		return new Map(entries)
+	} else {
+		return new Map()
+	}
+  // return new Map(Object.entries(obj));
+  //Alternatively:
+  // let strMap = new Map();
+  // for (let k of Object.keys(obj)) {
+  //   strMap.set(k, obj[k]);
+  // }
+  // return strMap;
 }
 
 //=========================================================================
