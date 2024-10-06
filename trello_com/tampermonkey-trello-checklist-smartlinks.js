@@ -12,14 +12,18 @@
     'use strict';
     //window.addEventListener('load', <function here>, false);
 
-    var selector = ".button-link.js-card-cover-chooser";
+    //var selector = ".button-link.js-card-cover-chooser";
+    var selector = 'button[data-testid=' + "card-back-custom-fields-button" + ']';
     (new MutationObserver(check)).observe(document, {childList: true, subtree: true});
 
     function check(changes, observer) {
-        if(document.querySelectorAll(selector).length > 0) {
-            console.log("Cover button loaded")
+        var refButton = $(selector)
+        if(refButton.length > 0) {
+            console.log("Reference button found")
             observer.disconnect();
             doStuff();
+        } else {
+            console.log("Cannot find button with selector: " + selector)
         }
     }
 
