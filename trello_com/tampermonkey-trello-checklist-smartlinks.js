@@ -11,8 +11,6 @@
 (function() {
     'use strict';
     //window.addEventListener('load', <function here>, false);
-
-    //var selector = ".button-link.js-card-cover-chooser";
     var selector = 'button[data-testid=' + "card-back-custom-fields-button" + ']';
     (new MutationObserver(check)).observe(document, {childList: true, subtree: true});
 
@@ -29,7 +27,7 @@
 
     function copy(val) {
         var textarea = document.querySelector('.js-copytextarea');
-        textarea.value = val
+        textarea.value = val;
         textarea.focus();
         textarea.select();
 
@@ -40,6 +38,29 @@
         } catch (err) {
             console.log('Oops, unable to copy');
         }
+    }
+
+    function getCheckboxCheckedStates() {
+        var checkboxes = $('div[data-testid="checklist-check-items-container"]').find('input[type="checkbox"]')
+        var checkedStates = checkboxes.map(function() {
+            var e = $(this);
+            var checked = e.attr("aria-checked")
+            return checked
+        });
+        return checkedStates;
+    }
+
+    function copyEventListener() {
+            var checkedStates = getCheckboxCheckedStates();
+            copy($('div[data-testid="check-item-name"]').map(function(i, val) {
+                var item = val.innerText + ": " + val.getAttribute("aria-label")
+                if (checkedStates[i] === "true") {
+                    item = item + " (DONE)"
+                }
+
+                return item
+            }).get().join("\n"))
+            //console.log("Copied!")
     }
 
     function doStuff() {
@@ -55,29 +76,8 @@
         copyChecklistButton.innerHTML = "Copy checklist (raw)"
         copyChecklistButton.id = "copy-checklist-raw";
         copyChecklistButton.className = "button-link"
-        copyChecklistButton.addEventListener('click', function() {
-            copy($(".checklist-item:not(.checklist-item-checked)").map(function() {
-                var e = $(this),
-                item = e.find(".checklist-item-details-text").text()
-                var smartlinks = e.find(".atlaskit-smart-link")
-
-                if (smartlinks.length) {
-                    //sanity check
-                    if (smartlinks.length != 1) {
-                        console.error("length of smartlinks should be 1, but it is: " + smartlinks.length)
-                    } else {
-                        item = item + "  " + smartlinks.attr("href")
-                    }
-                }
-
-                if (e.hasClass("checklist-item-state-complete")) {
-                    item = item + " (DONE)"
-                }
-
-                return item
-            }).get().join("\n"))
-            console.log("Copied!")
-        });
-       coverButton.parentNode.appendChild(copyChecklistButton)
+        copyChecklistButton.addEventListener('click', copyEventListener);
+        coverButton.parentNode.appendChild(copyChecklistButton)
     }
 })();
+
