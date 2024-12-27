@@ -53,7 +53,12 @@
     function copyEventListener() {
             var checkedStates = getCheckboxCheckedStates();
             copy($('div[data-testid="check-item-name"]').map(function(i, val) {
-                var item = val.innerText + ": " + val.getAttribute("aria-label")
+                var text = val.innerText
+                var label = val.getAttribute("aria-label")
+                var item = label
+                if (label !== text) {
+                    item = text + ": " + label
+                }
                 if (checkedStates[i] === "true") {
                     item = item + " (DONE)"
                 }
