@@ -5,7 +5,7 @@ function getShowMoreLabelsButtonJQuery() {
 
 function getElementByInnerHTML(text) {
     const elements = document.getElementsByTagName('button'); // Select all elements in the document
-    console.log("Found " + elements.length + " buttons.");
+    //console.log("Found " + elements.length + " buttons.");
 
     for (const element of elements) {
         if (element.innerHTML === text) {
@@ -16,17 +16,34 @@ function getElementByInnerHTML(text) {
     return null; // Return null if no element is found
 }
 
-(function clickButtonLoop() {
+function clickButtonLoop(innerHTML) {
     setTimeout(function() {
-        button = getElementByInnerHTML('Show more labels')
-        if (button) {
-            console.log("clicking button: " + button)
-            button.click()
-            clickButtonLoop()
+        var showMoreLabelsButton = getElementByInnerHTML(innerHTML)
+        if (showMoreLabelsButton) {
+            console.log("clicking button: " + showMoreLabelsButton)
+            showMoreLabelsButton.click()
+            clickButtonLoop(innerHTML)
         }
 
     }, 100)
-})()
+    console.log("clickButtonLoop ended")
+}
+
+function waitForButtonDisappear(callback) {
+    (new MutationObserver(check)).observe(document, {childList: true, subtree: true});
+
+    function check(changes, observer) {
+        var button = getElementByInnerHTML('Show more labels')
+        if (button) {
+            console.log("waitForButtonDisappear:: button found")
+        } else {
+            console.log("waitForButtonDisappear:: button NOT FOUND")
+            observer.disconnect()
+            callback()
+        }
+    }
+
+}
 
 function getElementsByProperty(name, value) {
     selector = `[${name}="${value}"]`
@@ -53,8 +70,6 @@ function getOrderedLabels() {
     listItemsArray.sort(function (a, b) {
         var aText = a.innerText;
         var bText = b.innerText;
-        console.log(aText)
-        console.log(bText)
         if (aText > bText) return 1;
         if (aText < bText) return -1;
         return 0;
@@ -63,12 +78,19 @@ function getOrderedLabels() {
 }
 
 function start() {
-    let [labelsArray, parentNode] = getOrderedLabels();
-    console.log("labels: ")
-    console.log(labelsArray)
+    clickButtonLoop("Show more labels")
+    console.log("AFTER CLICKBUTTONLOOP...")
+    waitForButtonDisappear(executeDOMOperations)
+}
 
-    console.log("parent node: ")
-    console.log(parentNode)
+function executeDOMOperations() {
+    console.log("Executing DOM Operations")
+    let [labelsArray, parentNode] = getOrderedLabels();
+    // console.log("labels: ")
+    // console.log(labelsArray)
+    //
+    // console.log("parent node: ")
+    // console.log(parentNode)
 
     labelsArray.forEach((label) => parentNode.removeChild(label));
     labelsArray.forEach((label) => parentNode.appendChild(label));
