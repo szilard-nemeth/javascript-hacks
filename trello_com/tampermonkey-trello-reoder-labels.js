@@ -28,4 +28,22 @@ function getElementByInnerHTML(text) {
     }, 100)
 })()
 
+function getElementsByProperty(name, value) {
+    selector = `[${name}="${value}"]`
+    console.log(selector)
+    const elements = document.querySelectorAll(selector);
+    return elements
+}
+
+function getListItems(parent) {
+    const listItems = parent.querySelectorAll("li");
+    return listItems
+}
+
+elements = getElementsByProperty("data-testid", "labels-popover-labels-screen")
+parent = elements[0]
+
+console.log(getListItems(parent))
+
+
 
