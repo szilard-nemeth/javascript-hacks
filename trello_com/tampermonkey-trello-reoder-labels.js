@@ -16,9 +16,16 @@ function getElementByInnerHTML(text) {
     return null; // Return null if no element is found
 }
 
-button = getElementByInnerHTML('Show more labels')
-if (button) {
-    console.log(button)
-}
+(function clickButtonLoop() {
+    setTimeout(function() {
+        button = getElementByInnerHTML('Show more labels')
+        if (button) {
+            console.log("clicking button: " + button)
+            button.click()
+            clickButtonLoop()
+        }
+
+    }, 100)
+})()
 
 
