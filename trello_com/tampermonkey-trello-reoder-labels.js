@@ -37,13 +37,18 @@ function getElementsByProperty(name, value) {
 
 function getListItems(parent) {
     const listItems = parent.querySelectorAll("li");
-    return listItems
+    let listItemParent = listItems[0].closest('ul')
+    return [listItems, listItemParent]
 }
 
-elements = getElementsByProperty("data-testid", "labels-popover-labels-screen")
-parent = elements[0]
+function start() {
+    var elements = getElementsByProperty("data-testid", "labels-popover-labels-screen")
+    let [listItems, parent] = getListItems(elements[0])
+    console.log("parent: "); console.log(parent)
+    console.log("list items: "); console.log(listItems)
+}
 
-console.log(getListItems(parent))
+start()
 
 
 
