@@ -43,9 +43,9 @@ function getListItems(parent) {
 
 function getOrderedLabels() {
     var elements = getElementsByProperty("data-testid", "labels-popover-labels-screen")
-    let [listItems, parent] = getListItems(elements[0])
+    let [listItems, parentNode] = getListItems(elements[0])
     console.log("parent: ");
-    console.log(parent)
+    console.log(parentNode)
     console.log("list items: ");
     console.log(listItems)
 
@@ -59,11 +59,19 @@ function getOrderedLabels() {
         if (aText < bText) return -1;
         return 0;
     });
-    return listItemsArray;
+    return [listItemsArray, parentNode];
 }
 
 function start() {
-    console.log(getOrderedLabels());
+    let [labelsArray, parentNode] = getOrderedLabels();
+    console.log("labels: ")
+    console.log(labelsArray)
+
+    console.log("parent node: ")
+    console.log(parentNode)
+
+    labelsArray.forEach((label) => parentNode.removeChild(label));
+    labelsArray.forEach((label) => parentNode.appendChild(label));
 }
 
 start()
