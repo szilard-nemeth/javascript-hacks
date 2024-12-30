@@ -69,7 +69,7 @@
     }
 
     function getElementsByProperty(name, value) {
-        selector = `[${name}="${value}"]`
+        let selector = `[${name}="${value}"]`
         console.log(selector)
         const elements = document.querySelectorAll(selector);
         return elements
