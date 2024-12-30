@@ -37,7 +37,23 @@ function waitForButtonDisappear(innerHTML, callback) {
             callback()
         }
     }
+}
 
+function waitForTrelloLabelsToAppear(callback) {
+    var selector = 'section[data-testid=' + "labels-popover-labels-screen" + ']';
+    (new MutationObserver(check)).observe(document, {childList: true, subtree: true});
+
+    function check(changes, observer) {
+        var refElement = document.querySelector(selector)
+        if (refElement) {
+            console.log("Labels menu found with selector: " + selector)
+            console.log(refElement)
+            observer.disconnect();
+            callback()
+        } else {
+            console.log("Labels menu NOT FOUND with selector: " + selector)
+        }
+    }
 }
 
 function getElementsByProperty(name, value) {
@@ -72,10 +88,12 @@ function getOrderedLabels() {
     return [listItemsArray, parentNode];
 }
 
-function start() {
-    clickButtonLoop("Show more labels")
-    console.log("AFTER CLICKBUTTONLOOP...")
-    waitForButtonDisappear("Show more labels", executeDOMOperations)
+function main() {
+    waitForTrelloLabelsToAppear(function () {
+        clickButtonLoop("Show more labels")
+        console.log("AFTER CLICKBUTTONLOOP...")
+        waitForButtonDisappear("Show more labels", executeDOMOperations)
+    })
 }
 
 function executeDOMOperations() {
@@ -91,7 +109,7 @@ function executeDOMOperations() {
     labelsArray.forEach((label) => parentNode.appendChild(label));
 }
 
-start()
+main()
 
 
 
