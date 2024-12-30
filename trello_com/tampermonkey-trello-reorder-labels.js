@@ -1,8 +1,3 @@
-function getShowMoreLabelsButtonJQuery() {
-    var button = $("button:contains(Show more labels)")[0]
-    return button
-}
-
 function getElementByInnerHTML(text) {
     const elements = document.getElementsByTagName('button'); // Select all elements in the document
     //console.log("Found " + elements.length + " buttons.");
@@ -29,11 +24,11 @@ function clickButtonLoop(innerHTML) {
     console.log("clickButtonLoop ended")
 }
 
-function waitForButtonDisappear(callback) {
+function waitForButtonDisappear(innerHTML, callback) {
     (new MutationObserver(check)).observe(document, {childList: true, subtree: true});
 
     function check(changes, observer) {
-        var button = getElementByInnerHTML('Show more labels')
+        var button = getElementByInnerHTML(innerHTML)
         if (button) {
             console.log("waitForButtonDisappear:: button found")
         } else {
@@ -80,7 +75,7 @@ function getOrderedLabels() {
 function start() {
     clickButtonLoop("Show more labels")
     console.log("AFTER CLICKBUTTONLOOP...")
-    waitForButtonDisappear(executeDOMOperations)
+    waitForButtonDisappear("Show more labels", executeDOMOperations)
 }
 
 function executeDOMOperations() {
