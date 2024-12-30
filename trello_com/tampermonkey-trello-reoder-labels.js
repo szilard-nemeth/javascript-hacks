@@ -4,7 +4,8 @@ function getShowMoreLabelsButtonJQuery() {
 }
 
 function getElementByInnerHTML(text) {
-    const elements = document.querySelectorAll('*'); // Select all elements in the document
+    const elements = document.getElementsByTagName('button'); // Select all elements in the document
+    console.log("Found " + elements.length + " buttons.");
 
     for (const element of elements) {
         if (element.innerHTML === text) {
@@ -16,5 +17,8 @@ function getElementByInnerHTML(text) {
 }
 
 button = getElementByInnerHTML('Show more labels')
-console.log(button)
+if (button) {
+    console.log(button)
+}
+
 
