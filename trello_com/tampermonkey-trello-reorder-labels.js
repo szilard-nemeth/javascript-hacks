@@ -41,11 +41,29 @@ function getListItems(parent) {
     return [listItems, listItemParent]
 }
 
-function start() {
+function getOrderedLabels() {
     var elements = getElementsByProperty("data-testid", "labels-popover-labels-screen")
     let [listItems, parent] = getListItems(elements[0])
-    console.log("parent: "); console.log(parent)
-    console.log("list items: "); console.log(listItems)
+    console.log("parent: ");
+    console.log(parent)
+    console.log("list items: ");
+    console.log(listItems)
+
+    var listItemsArray = Array.prototype.slice.call(listItems, 0);
+    listItemsArray.sort(function (a, b) {
+        var aText = a.innerText;
+        var bText = b.innerText;
+        console.log(aText)
+        console.log(bText)
+        if (aText > bText) return 1;
+        if (aText < bText) return -1;
+        return 0;
+    });
+    return listItemsArray;
+}
+
+function start() {
+    console.log(getOrderedLabels());
 }
 
 start()
