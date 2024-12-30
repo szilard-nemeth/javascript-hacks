@@ -90,13 +90,28 @@ function getOrderedLabels() {
 
 function main() {
     waitForTrelloLabelsToAppear(function () {
+        addSortLabelsButton()
+
         clickButtonLoop("Show more labels")
         console.log("AFTER CLICKBUTTONLOOP...")
-        waitForButtonDisappear("Show more labels", executeDOMOperations)
+        waitForButtonDisappear("Show more labels", function () {
+            console.log("Show more labels finished");
+
+        })
     })
 }
 
-function executeDOMOperations() {
+function addSortLabelsButton() {
+    let createNewLabelButton = getElementByInnerHTML("Create a new label")
+    let sortLabelsButton = document.createElement("button");
+    sortLabelsButton.innerHTML = "Sort labels (A-Z)"
+    sortLabelsButton.id = "sort-labels-button";
+    sortLabelsButton.className = "button-link"
+    sortLabelsButton.addEventListener('mousedown', sortLabels);
+    createNewLabelButton.parentNode.appendChild(sortLabelsButton)
+}
+
+function sortLabels() {
     console.log("Executing DOM Operations")
     let [labelsArray, parentNode] = getOrderedLabels();
     // console.log("labels: ")
