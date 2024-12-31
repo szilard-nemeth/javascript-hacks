@@ -12,8 +12,6 @@
 
     function getElementByInnerHTML(text) {
         const elements = document.getElementsByTagName('button'); // Select all elements in the document
-        //console.log("Found " + elements.length + " buttons.");
-
         for (const element of elements) {
             if (element.innerHTML === text) {
                 return element;
@@ -27,13 +25,12 @@
         setTimeout(function () {
             var showMoreLabelsButton = getElementByInnerHTML(innerHTML)
             if (showMoreLabelsButton) {
-                console.log("clicking button: " + showMoreLabelsButton)
+                console.log("Clicking button: " + showMoreLabelsButton)
                 showMoreLabelsButton.click()
                 clickButtonLoop(innerHTML)
             }
 
         }, 100)
-        console.log("clickButtonLoop ended")
     }
 
     function waitForButtonDisappear(innerHTML, callback) {
@@ -58,21 +55,19 @@
         function check(changes, observer) {
             var refElement = document.querySelector(selector)
             if (refElement) {
-                console.log("Labels menu found with selector: " + selector)
+                console.log("waitForTrelloLabelsToAppear:: Labels menu found with selector: " + selector)
                 console.log(refElement)
                 observer.disconnect();
                 callback()
             } else {
-                console.log("Labels menu NOT FOUND with selector: " + selector)
+                console.log("waitForTrelloLabelsToAppear:: Labels menu NOT FOUND with selector: " + selector)
             }
         }
     }
 
     function getElementsByProperty(name, value) {
         let selector = `[${name}="${value}"]`
-        console.log(selector)
-        const elements = document.querySelectorAll(selector);
-        return elements
+        return document.querySelectorAll(selector)
     }
 
     function getListItems(parent) {
@@ -84,10 +79,6 @@
     function getOrderedLabels() {
         var elements = getElementsByProperty("data-testid", "labels-popover-labels-screen")
         let [listItems, parentNode] = getListItems(elements[0])
-        console.log("parent: ");
-        console.log(parentNode)
-        console.log("list items: ");
-        console.log(listItems)
 
         var listItemsArray = Array.prototype.slice.call(listItems, 0);
         listItemsArray.sort(function (a, b) {
@@ -103,13 +94,8 @@
     function main() {
         waitForTrelloLabelsToAppear(function () {
             addSortLabelsButton()
-
             clickButtonLoop("Show more labels")
-            console.log("AFTER CLICKBUTTONLOOP...")
-            waitForButtonDisappear("Show more labels", function () {
-                console.log("Show more labels finished");
-
-            })
+            waitForButtonDisappear("Show more labels", function () {})
         })
     }
 
@@ -124,14 +110,8 @@
     }
 
     function sortLabels() {
-        console.log("Executing DOM Operations")
+        console.log("Sorting labels...")
         let [labelsArray, parentNode] = getOrderedLabels();
-        // console.log("labels: ")
-        // console.log(labelsArray)
-        //
-        // console.log("parent node: ")
-        // console.log(parentNode)
-
         labelsArray.forEach((label) => parentNode.removeChild(label));
         labelsArray.forEach((label) => parentNode.appendChild(label));
     }
