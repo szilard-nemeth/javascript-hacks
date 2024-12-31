@@ -6,7 +6,6 @@
 // @author       Szilard Nemeth
 // @include      https://trello.com/*
 // @grant        none
-// @require      https://code.jquery.com/jquery-3.2.1.min.js
 // ==/UserScript==
 (function() {
     'use strict';
