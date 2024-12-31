@@ -24,7 +24,7 @@
     }
 
     function copy(val) {
-        var textarea = document.querySelector('.js-copytextarea');
+        const textarea = document.querySelector('.js-copytextarea');
         textarea.focus();
         textarea.value = val;
         window.setTimeout(() => {
@@ -34,8 +34,8 @@
             console.log("Currently focused element is: " + document.activeElement);
 
             try {
-                var successful = document.execCommand('copy');
-                var msg = successful ? 'successful' : 'unsuccessful';
+                const successful = document.execCommand('copy');
+                const msg = successful ? 'successful' : 'unsuccessful';
                 console.log('Copying text command was ' + msg);
             } catch (err) {
                 console.log('Oops, unable to copy');
@@ -44,10 +44,10 @@
     }
 
     function getCheckboxCheckedStates() {
-        var checkboxes = $('div[data-testid="checklist-check-items-container"]').find('input[type="checkbox"]')
-        var checkedStates = checkboxes.map(function() { 
+        const checkboxes = $('div[data-testid="checklist-check-items-container"]').find('input[type="checkbox"]');
+        const checkedStates = checkboxes.map(function () {
             var e = $(this);
-            var checked = e.attr("aria-checked")
+            const checked = e.attr("aria-checked");
             return checked
         });
         return checkedStates;
@@ -81,7 +81,6 @@
         document.body.appendChild(copyTextArea)
 
         const customFieldsButton = document.querySelector(selector)
-        console.log(customFieldsButton)
         let copyChecklistButton = document.createElement("button");
         copyChecklistButton.innerHTML = "Copy checklist (raw)"
         copyChecklistButton.id = "copy-checklist-raw";
