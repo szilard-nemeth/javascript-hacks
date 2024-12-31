@@ -15,13 +15,11 @@
     (new MutationObserver(check)).observe(document, {childList: true, subtree: true});
 
     function check(changes, observer) {
-        const refButton = $(selector)
-        if(refButton.length > 0) {
-            console.log("Reference button found")
+        const customFieldsButton = document.querySelector(selector)
+        if (customFieldsButton.length > 0) {
+            console.log("'Custom Fields' button found")
             observer.disconnect();
             doStuff();
-        } else {
-            console.log("Cannot find button with selector: " + selector)
         }
     }
 
@@ -82,14 +80,14 @@
         copyTextArea.className = "js-copytextarea"
         document.body.appendChild(copyTextArea)
 
-        const coverButton = document.querySelectorAll(selector)[0]
-        console.log(coverButton)
+        const customFieldsButton = document.querySelector(selector)
+        console.log(customFieldsButton)
         let copyChecklistButton = document.createElement("button");
         copyChecklistButton.innerHTML = "Copy checklist (raw)"
         copyChecklistButton.id = "copy-checklist-raw";
         copyChecklistButton.className = "button-link"
         copyChecklistButton.addEventListener('mousedown', copyEventListener);
-        coverButton.parentNode.appendChild(copyChecklistButton)
+        customFieldsButton.parentNode.appendChild(copyChecklistButton)
     }
 })();
 
