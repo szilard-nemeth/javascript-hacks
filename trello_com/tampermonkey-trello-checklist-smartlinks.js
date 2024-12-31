@@ -11,11 +11,11 @@
 (function() {
     'use strict';
     //window.addEventListener('load', <function here>, false);
-    var selector = 'button[data-testid=' + "card-back-custom-fields-button" + ']';
+    const selector = 'button[data-testid=' + "card-back-custom-fields-button" + ']';
     (new MutationObserver(check)).observe(document, {childList: true, subtree: true});
 
     function check(changes, observer) {
-        var refButton = $(selector)
+        const refButton = $(selector)
         if(refButton.length > 0) {
             console.log("Reference button found")
             observer.disconnect();
@@ -59,11 +59,11 @@
             console.log("event: " + e)
             e.preventDefault();
             e.stopPropagation();
-            var checkedStates = getCheckboxCheckedStates();
+            const checkedStates = getCheckboxCheckedStates();
             copy($('div[data-testid="check-item-name"]').map(function(i, val) {
-                var text = val.innerText
-                var label = val.getAttribute("aria-label")
-                var item = label
+                const text = val.innerText;
+                const label = val.getAttribute("aria-label");
+                let item = label;
                 if (label !== text) {
                     item = text + ": " + label
                 }
