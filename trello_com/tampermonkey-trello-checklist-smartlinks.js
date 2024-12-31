@@ -6,15 +6,40 @@
 // @author       Szilard Nemeth
 // @include      https://trello.com/*
 // @grant        none
+
 // ==/UserScript==
 (function() {
     'use strict';
-    //window.addEventListener('load', <function here>, false);
     const customFieldsButtonSelector = 'button[data-testid=' + "card-back-custom-fields-button" + ']';
-    const copyTextAreaClassName = "js-copytextarea"
+    const copyTextAreaClassName = "js-copytextarea";
+
+    function addCopyTextAreaToBackOfCard(getElementByInnerHTML, copyTextAreaClassName) {
+        let activityText = getElementByInnerHTML("h3", "Activity")
+        let activitySection = activityText.closest("section")
+        let activityParentDiv = activitySection.closest("div")
+
+        let newSection = document.createElement("section");
+        newSection.setAttribute("class", activitySection.getAttribute("class"));
+        activityParentDiv.appendChild(newSection)
+
+        let copyTextArea = document.createElement("textarea");
+        copyTextArea.className = copyTextAreaClassName
+        newSection.appendChild(copyTextArea)
+    }
+
+
+    function getElementByInnerHTML(tagName, text) {
+        const elements = document.getElementsByTagName(tagName); // Select all elements in the document
+        for (const element of elements) {
+            if (element.innerHTML === text) {
+                return element;
+            }
+        }
+        return null; // Return null if no element is found
+    }
+
 
     (new MutationObserver(check)).observe(document, {childList: true, subtree: true});
-
     function check(changes, observer) {
         const customFieldsButton = document.querySelector(customFieldsButtonSelector)
         if (customFieldsButton) {
@@ -26,22 +51,19 @@
 
     function copy(val) {
         const textarea = document.querySelector('.' + copyTextAreaClassName);
-        textarea.focus();
         textarea.value = val;
-        window.setTimeout(() => {
-            console.log("Trying to focus on textarea: " + textarea)
-            textarea.focus();
-            textarea.select();
-            console.log("Currently focused element is: " + document.activeElement);
+        console.log("Trying to focus on textarea: " + textarea)
+        textarea.focus();
+        textarea.select();
+        console.log("Currently focused element is: " + document.activeElement);
 
-            try {
-                const successful = document.execCommand('copy');
-                const msg = successful ? 'successful' : 'unsuccessful';
-                console.log('Copying text command was ' + msg);
-            } catch (err) {
-                console.log('Oops, unable to copy');
-            }
-        }, 100); 
+        try {
+            const successful = document.execCommand('copy');
+            const msg = successful ? 'successful' : 'unsuccessful';
+            console.log('Copying text command was ' + msg);
+        } catch (err) {
+            console.log('Oops, unable to copy');
+        }
     }
 
     function findElements(parentSelector, childrenSelector) {
@@ -64,13 +86,13 @@
     }
 
     function copyEventListener(e) {
-            console.log("event: " + e)
-            e.preventDefault();
-            e.stopPropagation();
-            const checkedStates = getCheckboxCheckedStates();
-            if (checkedStates.length === 0) {
-                console.error("Invalid checked states, length is 0!")
-            }
+        console.log("event: " + e)
+        e.preventDefault();
+        e.stopPropagation();
+        const checkedStates = getCheckboxCheckedStates();
+        if (checkedStates.length === 0) {
+            console.error("Invalid checked states, length is 0!")
+        }
         let checkItemNodeList = document.querySelectorAll('div[data-testid="check-item-name"]');
         let checkItemArray = Array.prototype.slice.call(checkItemNodeList, 0);
         copy(checkItemArray.map((value, index) => {
@@ -90,10 +112,7 @@
 
     function start() {
         console.log("Executing script...")
-
-        let copyTextArea = document.createElement("textarea");
-        copyTextArea.className = copyTextAreaClassName
-        document.body.appendChild(copyTextArea)
+        addCopyTextAreaToBackOfCard(getElementByInnerHTML, copyTextAreaClassName);
 
         const customFieldsButton = document.querySelector(customFieldsButtonSelector)
         let copyChecklistButton = document.createElement("button");
