@@ -72,19 +72,21 @@
             }
             console.log("checkedStates");
             console.log(checkedStates);
-            copy($('div[data-testid="check-item-name"]').map(function(i, val) {
-                const text = val.innerText;
-                const label = val.getAttribute("aria-label");
+        let checkItemNodeList = document.querySelectorAll('div[data-testid="check-item-name"]');
+        let checkItemArray = Array.prototype.slice.call(checkItemNodeList, 0);
+        copy(checkItemArray.map((value, index) => {
+                const text = value.innerText;
+                const label = value.getAttribute("aria-label");
                 let item = label;
                 if (label !== text) {
                     item = text + ": " + label
                 }
-                if (checkedStates[i] === "true") {
+                if (checkedStates[index] === true) {
                     item = item + " (DONE)"
                 }
 
                 return item
-            }).get().join("\n"))
+            }).join("\n"))
     }
 
     function doStuff() {
