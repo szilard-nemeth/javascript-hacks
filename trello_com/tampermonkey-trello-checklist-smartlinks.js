@@ -43,17 +43,23 @@
         }, 100); 
     }
 
+    function findElements(parentSelector, childrenSelector) {
+        const parents = document.querySelectorAll(parentSelector);
+
+        let found = [];
+        for (let i = 0; i < parents.length; i++) {
+            let children = parents[i].querySelectorAll(childrenSelector);
+            children = Array.prototype.slice.call(children);
+            found = found.concat(children);
+        }
+        return found
+    }
+
     function getCheckboxCheckedStates() {
-        const checkItemsContainer = document.querySelector('div[data-testid="checklist-check-items-container"]')
-        const checkboxes2 = checkItemsContainer.querySelectorAll('input[type="checkbox"]')
-        console.log(checkboxes2)
-        const checkboxes = $('div[data-testid="checklist-check-items-container"]').find('input[type="checkbox"]');
-        const checkedStates = checkboxes.map(function () {
-            var e = $(this);
-            const checked = e.attr("aria-checked");
-            return checked
+        const checkboxes = findElements('div[data-testid=checklist-container]', 'input[type="checkbox"]')
+        return checkboxes.map((value, index) => {
+            return value.checked
         });
-        return checkedStates;
     }
 
     function copyEventListener(e) {
@@ -61,6 +67,11 @@
             e.preventDefault();
             e.stopPropagation();
             const checkedStates = getCheckboxCheckedStates();
+            if (checkedStates.length === 0) {
+                console.error("Invalid checked states, length is 0!")
+            }
+            console.log("checkedStates");
+            console.log(checkedStates);
             copy($('div[data-testid="check-item-name"]').map(function(i, val) {
                 const text = val.innerText;
                 const label = val.getAttribute("aria-label");
