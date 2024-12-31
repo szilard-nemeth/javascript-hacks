@@ -47,7 +47,7 @@
     }
 
     function waitForTrelloLabelsToAppear(callback) {
-        var selector = 'section[data-testid=' + "labels-popover-labels-screen" + ']';
+        var selector = 'section[data-testid=labels-popover-labels-screen]';
         (new MutationObserver(check)).observe(document, {childList: true, subtree: true});
 
         function check(changes, observer) {

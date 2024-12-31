@@ -11,7 +11,7 @@
 (function() {
     'use strict';
     //window.addEventListener('load', <function here>, false);
-    var selector = 'button[data-testid=' + "card-back-custom-fields-button" + ']';
+    var selector = 'button[data-testid=card-back-custom-fields-button]';
     (new MutationObserver(check)).observe(document, {childList: true, subtree: true});
 
     function check(changes, observer) {
