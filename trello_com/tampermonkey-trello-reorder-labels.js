@@ -38,9 +38,7 @@
 
         function check(changes, observer) {
             var button = getElementByInnerHTML(innerHTML)
-            if (button) {
-                console.log("waitForButtonDisappear:: button found")
-            } else {
+            if (button === null) {
                 console.log("waitForButtonDisappear:: button NOT FOUND")
                 observer.disconnect()
                 callback()
@@ -59,8 +57,6 @@
                 console.log(refElement)
                 observer.disconnect();
                 callback()
-            } else {
-                console.log("waitForTrelloLabelsToAppear:: Labels menu NOT FOUND with selector: " + selector)
             }
         }
     }
