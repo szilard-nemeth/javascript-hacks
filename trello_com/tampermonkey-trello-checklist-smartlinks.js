@@ -27,22 +27,27 @@
 
     function copy(val) {
         var textarea = document.querySelector('.js-copytextarea');
-        textarea.value = val;
         textarea.focus();
-        textarea.select();
+        textarea.value = val;
+        window.setTimeout(() => {
+            console.log("Trying to focus on textarea: " + textarea)
+            textarea.focus();
+            textarea.select();
+            console.log("Currently focused element is: " + document.activeElement);
 
-        try {
-            var successful = document.execCommand('copy');
-            var msg = successful ? 'successful' : 'unsuccessful';
-            console.log('Copying text command was ' + msg);
-        } catch (err) {
-            console.log('Oops, unable to copy');
-        }
+            try {
+                var successful = document.execCommand('copy');
+                var msg = successful ? 'successful' : 'unsuccessful';
+                console.log('Copying text command was ' + msg);
+            } catch (err) {
+                console.log('Oops, unable to copy');
+            }
+        }, 100); 
     }
 
     function getCheckboxCheckedStates() {
         var checkboxes = $('div[data-testid="checklist-check-items-container"]').find('input[type="checkbox"]')
-        var checkedStates = checkboxes.map(function() {
+        var checkedStates = checkboxes.map(function() { 
             var e = $(this);
             var checked = e.attr("aria-checked")
             return checked
@@ -50,7 +55,10 @@
         return checkedStates;
     }
 
-    function copyEventListener() {
+    function copyEventListener(e) {
+            console.log("event: " + e)
+            e.preventDefault();
+            e.stopPropagation();
             var checkedStates = getCheckboxCheckedStates();
             copy($('div[data-testid="check-item-name"]').map(function(i, val) {
                 var text = val.innerText
@@ -65,15 +73,14 @@
 
                 return item
             }).get().join("\n"))
-            //console.log("Copied!")
     }
 
     function doStuff() {
         console.log("Executing script...")
 
-        let hiddenInput = document.createElement("textarea");
-        hiddenInput.className = "js-copytextarea"
-        document.body.appendChild(hiddenInput)
+        let copyTextArea = document.createElement("textarea");
+        copyTextArea.className = "js-copytextarea"
+        document.body.appendChild(copyTextArea)
 
         const coverButton = document.querySelectorAll(selector)[0]
         console.log(coverButton)
@@ -81,7 +88,7 @@
         copyChecklistButton.innerHTML = "Copy checklist (raw)"
         copyChecklistButton.id = "copy-checklist-raw";
         copyChecklistButton.className = "button-link"
-        copyChecklistButton.addEventListener('click', copyEventListener);
+        copyChecklistButton.addEventListener('mousedown', copyEventListener);
         coverButton.parentNode.appendChild(copyChecklistButton)
     }
 })();
