@@ -16,7 +16,7 @@
 
     function check(changes, observer) {
         const customFieldsButton = document.querySelector(selector)
-        if (customFieldsButton.length > 0) {
+        if (customFieldsButton) {
             console.log("'Custom Fields' button found")
             observer.disconnect();
             doStuff();
@@ -44,6 +44,9 @@
     }
 
     function getCheckboxCheckedStates() {
+        const checkItemsContainer = document.querySelector('div[data-testid="checklist-check-items-container"]')
+        const checkboxes2 = checkItemsContainer.querySelectorAll('input[type="checkbox"]')
+        console.log(checkboxes2)
         const checkboxes = $('div[data-testid="checklist-check-items-container"]').find('input[type="checkbox"]');
         const checkedStates = checkboxes.map(function () {
             var e = $(this);
