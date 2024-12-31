@@ -10,20 +10,22 @@
 (function() {
     'use strict';
     //window.addEventListener('load', <function here>, false);
-    const selector = 'button[data-testid=' + "card-back-custom-fields-button" + ']';
+    const customFieldsButtonSelector = 'button[data-testid=' + "card-back-custom-fields-button" + ']';
+    const copyTextAreaClassName = "js-copytextarea"
+
     (new MutationObserver(check)).observe(document, {childList: true, subtree: true});
 
     function check(changes, observer) {
-        const customFieldsButton = document.querySelector(selector)
+        const customFieldsButton = document.querySelector(customFieldsButtonSelector)
         if (customFieldsButton) {
             console.log("'Custom Fields' button found")
             observer.disconnect();
-            doStuff();
+            start();
         }
     }
 
     function copy(val) {
-        const textarea = document.querySelector('.js-copytextarea');
+        const textarea = document.querySelector('.' + copyTextAreaClassName);
         textarea.focus();
         textarea.value = val;
         window.setTimeout(() => {
@@ -69,8 +71,6 @@
             if (checkedStates.length === 0) {
                 console.error("Invalid checked states, length is 0!")
             }
-            console.log("checkedStates");
-            console.log(checkedStates);
         let checkItemNodeList = document.querySelectorAll('div[data-testid="check-item-name"]');
         let checkItemArray = Array.prototype.slice.call(checkItemNodeList, 0);
         copy(checkItemArray.map((value, index) => {
@@ -88,14 +88,14 @@
             }).join("\n"))
     }
 
-    function doStuff() {
+    function start() {
         console.log("Executing script...")
 
         let copyTextArea = document.createElement("textarea");
-        copyTextArea.className = "js-copytextarea"
+        copyTextArea.className = copyTextAreaClassName
         document.body.appendChild(copyTextArea)
 
-        const customFieldsButton = document.querySelector(selector)
+        const customFieldsButton = document.querySelector(customFieldsButtonSelector)
         let copyChecklistButton = document.createElement("button");
         copyChecklistButton.innerHTML = "Copy checklist (raw)"
         copyChecklistButton.id = "copy-checklist-raw";
