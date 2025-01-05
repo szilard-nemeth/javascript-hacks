@@ -89,6 +89,12 @@
 
     function main() {
         waitForTrelloLabelsToAppear(function () {
+            var closeLabelsPanelButton = document.querySelector('button[data-testid=popover-close]')
+            closeLabelsPanelButton.addEventListener("click", function (e) {
+                main()
+                console.log("calling main")
+            });
+
             addSortLabelsButton()
             clickButtonLoop("Show more labels")
             waitForButtonDisappear("Show more labels", function () {})
